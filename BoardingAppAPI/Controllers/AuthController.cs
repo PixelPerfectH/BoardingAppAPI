@@ -14,6 +14,7 @@ namespace BoardingAppAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("[action]")]
         public IActionResult Login()
         {
             return Ok();
