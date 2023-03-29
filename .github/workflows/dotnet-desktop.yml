@@ -1,0 +1,73 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  PROJECT_NAME: BoardingAppAPI
+  PROJECT_CONFIGURATION: Debug
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c ${{ env.PROJECT_CONFIGURATION }} --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: ${{ env.PROJECT_CONFIGURATION }}
+        path: ${{ env.PROJECT_NAME }}/bin/${{ env.PROJECT_CONFIGURATION }}/net7.0/*
+        if-no-files-found: error
+        retention-days: 7
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3.0.1
+      with:
+        name: ${{ env.PROJECT_CONFIGURATION }}
+        path: ${{ env.PROJECT_CONFIGURATION }}
+    - name: Stop service on server
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: systemctl stop ${{ secrets.SERVICE_NAME }}
+    - name: Deploy to server
+      uses: easingthemes/ssh-deploy@v3.0.1
+      with:
+       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+       REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+       REMOTE_USER: ${{ secrets.REMOTE_USER }}
+       SOURCE: ${{ env.PROJECT_CONFIGURATION }}/
+       TARGET: ${{ secrets.TARGET_DIRECTORY }}
+       REMOTE_PORT: 22 -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa
+    - name: Start service on server
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: systemctl start ${{ secrets.SERVICE_NAME }}
