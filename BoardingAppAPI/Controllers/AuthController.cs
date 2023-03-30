@@ -20,7 +20,7 @@ namespace BoardingAppAPI.Controllers
         public async Task<IActionResult> LoginAsync([FromBody] LoginModel model, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(user => user.Name == model.UserName, cancellationToken);
+                .FirstOrDefaultAsync(user => user.UserName == model.UserName, cancellationToken);
 
             if (user is null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
