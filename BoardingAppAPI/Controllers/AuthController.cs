@@ -33,6 +33,9 @@ namespace BoardingAppAPI.Controllers
             var newToken = TokenHelper.GenerateToken();
             user.Tokens.Add(new (newToken));
 
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
             return Ok(newToken);
         }
 
