@@ -40,7 +40,7 @@ namespace BoardingAppAPI.Controllers
         public async Task<IActionResult> LoginByTokenAsync([FromBody] LoginByTokenModel model, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(user => user.Tokens.FirstOrDefault(token => token.Token == model.Token) != null, cancellationToken);
+                .FirstOrDefaultAsync(user => user.Tokens.Where(token => token.Token == model.Token) != null, cancellationToken);
 
             if (user is null)
             {
