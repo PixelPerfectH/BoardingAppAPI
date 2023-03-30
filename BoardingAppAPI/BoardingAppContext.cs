@@ -12,6 +12,9 @@ namespace BoardingAppAPI
         [NotNull]
         public DbSet<DBActivity>? Activities { get; set; }
 
+        [NotNull]
+        public DbSet<DBTask>? Tasks { get; set; }
+
         public BoardingAppContext(DbContextOptions<BoardingAppContext> options): base(options)
         {
             Database.EnsureCreated();
