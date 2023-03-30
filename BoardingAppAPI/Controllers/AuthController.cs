@@ -1,4 +1,5 @@
 ﻿using BoardingAppAPI.Models.Auth;
+using BoardingAppAPI.Models.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,17 @@ namespace BoardingAppAPI.Controllers
             {
                 return NotFound();
             }
+
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model, CancellationToken cancellationToken)
+        {
+            DBUser user = new DBUser(model.UserName, model.Password);
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return Ok();
         }

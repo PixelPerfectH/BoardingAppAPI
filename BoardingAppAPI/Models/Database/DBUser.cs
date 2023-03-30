@@ -2,6 +2,15 @@
 {
     public class DBUser
     {
+        public DBUser() { }
+
+        public DBUser(string userName, string password)
+        {
+            UserName = userName;
+            Password = BCrypt.Net.BCrypt.HashPassword(password);
+            CreatedAt= DateTime.Now;
+        }
+
         public int Id { get; set; }
 
         public string? UserName { get; set; }
