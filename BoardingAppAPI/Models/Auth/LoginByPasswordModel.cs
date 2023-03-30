@@ -2,7 +2,7 @@
 
 namespace BoardingAppAPI.Models.Auth
 {
-    public class LoginModel
+    public class LoginByPasswordModel
     {
         [Required]
         public required string UserName { get; set; }

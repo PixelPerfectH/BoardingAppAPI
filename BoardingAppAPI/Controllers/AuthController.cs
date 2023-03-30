@@ -1,4 +1,6 @@
-﻿using BoardingAppAPI.Models.Auth;
+﻿using BoardingAppAPI.Helpers;
+using BoardingAppAPI.Models.ActionResult;
+using BoardingAppAPI.Models.Auth;
 using BoardingAppAPI.Models.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,7 @@ namespace BoardingAppAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> LoginByPasswordAsync([FromBody] LoginByPasswordModel model, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(user => user.UserName == model.UserName, cancellationToken);
@@ -28,18 +30,36 @@ namespace BoardingAppAPI.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            var newToken = TokenHelper.GenerateToken();
+            user.Tokens.Add(new (newToken));
+
+            return Ok(newToken);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> LoginByTokenAsync([FromBody] LoginByTokenModel model, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(user => user.Tokens.FirstOrDefault(token => token.Token == model.Token) != null, cancellationToken);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new UserResult(user));
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model, CancellationToken cancellationToken)
         {
-            DBUser user = new DBUser(model.UserName, model.Password);
+            var newToken = TokenHelper.GenerateToken();
+            var user = new DBUser(model.UserName, model.Password, newToken);
 
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
-            return Ok();
+            return Ok(newToken);
         }
     }
 }

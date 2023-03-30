@@ -4,11 +4,16 @@
     {
         public DBUser() { }
 
-        public DBUser(string userName, string password)
+        public DBUser(string userName, string password, string token)
         {
             UserName = userName;
             Password = BCrypt.Net.BCrypt.HashPassword(password);
-            CreatedAt= DateTime.Now;
+            Avatar = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAZElEQVR42u3QAQ0AAAQAMMLJJTo5zB/hWRMdj6UAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBBw3wLg+nEBahIYwAAAAABJRU5ErkJggg==");
+            CreatedAt = DateTime.Now;
+            Tokens = new()
+            {
+                new(token)
+            };
         }
 
         public int Id { get; set; }
@@ -26,5 +31,7 @@
         public byte[]? Avatar { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public List<DBToken> Tokens { get; set; }
     }
 }
