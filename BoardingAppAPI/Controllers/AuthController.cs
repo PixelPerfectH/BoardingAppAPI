@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BoardingAppAPI.Models.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoardingAppAPI.Controllers
 {
@@ -14,9 +16,17 @@ namespace BoardingAppAPI.Controllers
             _context = context;
         }
 
-        [HttpGet("[action]")]
-        public IActionResult Login()
+        [HttpPost("[action]")]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginModel model, CancellationToken cancellationToken)
         {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(user => user.Name == model.UserName, cancellationToken);
+
+            if (user is null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            {
+                return NotFound();
+            }
+
             return Ok();
         }
     }
