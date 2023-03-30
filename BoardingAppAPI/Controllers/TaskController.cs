@@ -8,7 +8,7 @@ namespace BoardingAppAPI.Controllers
     public class TaskController : ControllerBase
     {
         [HttpGet("[action]")]
-        public IActionResult GetTasks(string token)
+        public IActionResult GetList(string token)
         {
             return Ok();
         }
