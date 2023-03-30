@@ -7,6 +7,7 @@
         public DBToken(string token)
         {
             Token = token;
+            CreatedAt = DateTime.Now;
         }
 
         public int Id { get; set; }

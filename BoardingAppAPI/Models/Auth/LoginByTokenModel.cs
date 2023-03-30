@@ -5,6 +5,6 @@ namespace BoardingAppAPI.Models.Auth
     public class LoginByTokenModel
     {
         [Required]
-        public required string Token;
+        public required string Token { get; set; }
     }
 }
