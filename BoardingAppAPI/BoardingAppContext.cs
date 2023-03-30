@@ -1,4 +1,5 @@
-﻿using BoardingAppAPI.Models.Database;
+﻿using BoardingAppAPI.Models;
+using BoardingAppAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
@@ -8,6 +9,9 @@ namespace BoardingAppAPI
     {
         [NotNull]
         public DbSet<DBUser>? Users { get; set; }
+
+        [NotNull]
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         [NotNull]
         public DbSet<DBActivity>? Activities { get; set; }

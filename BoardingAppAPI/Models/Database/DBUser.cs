@@ -1,37 +1,55 @@
-﻿namespace BoardingAppAPI.Models.Database
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BoardingAppAPI.Models.Database
 {
     public class DBUser
     {
         public DBUser() { }
 
-        public DBUser(string userName, string password, string token)
-        {
-            UserName = userName;
-            Password = BCrypt.Net.BCrypt.HashPassword(password);
-            Avatar = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAZElEQVR42u3QAQ0AAAQAMMLJJTo5zB/hWRMdj6UAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBBw3wLg+nEBahIYwAAAAABJRU5ErkJggg==");
-            CreatedAt = DateTime.Now;
-            Tokens = new()
-            {
-                new(token)
-            };
-        }
 
-        public int Id { get; set; }
+        [Key]
+        public long Id { get; set; }
 
-        public string? UserName { get; set; }
+        /// <summary>
+        /// UserName.
+        /// </summary>
+        [Required]
+        public required string? UserName { get; set; }
 
+        /// <summary>
+        /// User's email.
+        /// </summary>
         public string? Email { get; set; }
 
-        public string? Password { get; set; }
+        /// <summary>
+        /// BCrypt hashed password.
+        /// </summary>
+        [Required]
+        public required string? HashedPassword { get; set; }
 
+        /// <summary>
+        /// User's firstname.
+        /// </summary>
         public string? FirstName { get; set; }
 
+        /// <summary>
+        /// User's lastname.
+        /// </summary>
         public string? LastName { get; set; }
 
+        /// <summary>
+        /// User's avatar.
+        /// </summary>
         public byte[]? Avatar { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        /// <summary>
+        /// Account creation date.
+        /// </summary>
+        public required DateTime CreatedAt { get; set; }
 
-        public List<DBToken> Tokens { get; set; }
+        /// <summary>
+        /// List of user's refresh tokens.
+        /// </summary>
+        public required List<RefreshToken> RefreshTokens { get; set; }
     }
 }
