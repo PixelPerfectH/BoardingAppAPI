@@ -14,7 +14,5 @@ namespace BoardingAppAPI.Models.Database
         public string? Description { get; set; }
 
         public bool IsActive { get; set; }
-
-        public DBUser? User { get; set; }
     }
 }
