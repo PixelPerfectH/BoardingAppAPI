@@ -46,13 +46,11 @@ namespace BoardingAppAPI.Models.Database
         [JsonIgnore]
         public long Id { get; set; }
 
-        [Required]
         public required string? UserName { get; set; }
 
         [JsonIgnore]
         public string? Email { get; set; }
-
-        [Required]
+        
         [JsonIgnore]
         public string? HashedPassword { get; set; }
 
