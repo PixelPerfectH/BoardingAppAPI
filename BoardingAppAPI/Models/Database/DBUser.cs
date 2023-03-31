@@ -10,27 +10,32 @@ namespace BoardingAppAPI.Models.Database
             var task1 = new DBTask()
             {
                 Name = "Task1",
-                Description = "Description 1"
+                Description = "Description 1",
+                IsActive = true
             };
             var task2 = new DBTask()
             {
-                Name = "Task1",
-                Description = "Description 1"
+                Name = "Task2",
+                Description = "Description 2",
+                IsActive = true
             };
             var task3 = new DBTask()
             {
-                Name = "Task1",
-                Description = "Description 1"
+                Name = "Task3",
+                Description = "Description 3",
+                IsActive = true
             };
             var task4 = new DBTask()
             {
-                Name = "Task1",
-                Description = "Description 1"
+                Name = "Task4",
+                Description = "Description 4",
+                IsActive = true
             };
             var task5 = new DBTask()
             {
-                Name = "Task1",
-                Description = "Description 1"
+                Name = "Task5",
+                Description = "Description 5",
+                IsActive = true
             };
             Tasks = new()
             {
@@ -61,7 +66,7 @@ namespace BoardingAppAPI.Models.Database
         public byte[]? Avatar { get; set; }
         
         [JsonIgnore]
-        public required DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public List<DBTask> Tasks { get; set; }
     }
