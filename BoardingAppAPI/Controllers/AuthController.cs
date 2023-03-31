@@ -1,11 +1,5 @@
-﻿using BoardingAppAPI.Helpers;
-using BoardingAppAPI.Models;
-using BoardingAppAPI.Models.ActionResult;
-using BoardingAppAPI.Models.Auth;
+﻿using BoardingAppAPI.Models.Auth;
 using BoardingAppAPI.Models.Database;
-using BoardingAppAPI.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mime;
