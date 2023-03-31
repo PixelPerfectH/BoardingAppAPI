@@ -54,7 +54,7 @@ namespace BoardingAppAPI.Models.Database
 
         [Required]
         [JsonIgnore]
-        public required string? HashedPassword { get; set; }
+        public string? HashedPassword { get; set; }
 
         public string? FirstName { get; set; }
 
