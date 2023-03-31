@@ -27,8 +27,6 @@ namespace BoardingAppAPI.Controllers
             var user = await _context.Users
                 .FirstOrDefaultAsync(user => user.UserName == model.UserName, cancellationToken);
 
-            Console.WriteLine(model.UserName + " " + model.Password);
-
             if (user is null || !BCrypt.Net.BCrypt.Verify(model.Password, user.HashedPassword))
             {
                 return NotFound();
