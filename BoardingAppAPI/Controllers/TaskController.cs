@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace BoardingAppAPI.Controllers
 {
@@ -7,10 +9,27 @@ namespace BoardingAppAPI.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        [HttpGet("[action]")]
-        public IActionResult GetList(string token)
+        private readonly ILogger<TaskController> _logger;
+        private readonly BoardingAppContext _context;
+
+        public TaskController(BoardingAppContext context, ILogger<TaskController> logger)
         {
-            return Ok();
+            _logger = logger;
+            _context = context;
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetListAsync(string userName, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(user => user.UserName == userName, cancellationToken);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
     }
 }
