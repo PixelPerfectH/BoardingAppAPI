@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BoardingAppAPI.Models.Database;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -19,7 +20,7 @@ namespace BoardingAppAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetListAsync(string userName, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetLevelsAsync(string userName, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(user => user.UserName == userName, cancellationToken);
@@ -29,7 +30,25 @@ namespace BoardingAppAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            var levels = new Dictionary<int, List<DBTask>>();
+
+            foreach (var task in user.Tasks)
+            {
+                var levelsList;
+
+                if (levels.ContainsKey(task.Level))
+                {
+                    levelsList = levels.Get(task.Level);
+
+                } else
+                {
+                    levelsList = new List<DBTask>();
+                }
+                levelsList.Add(task);
+                levels[task.Level] = levelsList;
+            }
+
+            return Ok(levels);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace BoardingAppAPI.Models.Database
 
         public string? Description { get; set; }
 
+        public int Level { get; set; }
+
         public bool IsActive { get; set; }
     }
 }
