@@ -1,4 +1,5 @@
-﻿using BoardingAppAPI.Models.Database;
+﻿using BoardingAppAPI.Models;
+using BoardingAppAPI.Models.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace BoardingAppAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAsync(string userName, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync(string userName, string taskName, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .Include(u => u.Tasks)
@@ -31,7 +32,37 @@ namespace BoardingAppAPI.Controllers
                 return NotFound();
             }
 
+
+
             return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CompleteAsync([FromBody] TaskModel model, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users
+                .Include(u => u.Tasks)
+                .FirstOrDefaultAsync(u => u.UserName == model.userName, cancellationToken);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+
+
+            for (int i = 0; i < user.Tasks.Count; i++)
+            {
+                if (user.Tasks[i].Name == model.taskName)
+                {
+                    user.Tasks[i].IsActive = false;
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+
+            return NotFound();
         }
     }
 }
