@@ -34,16 +34,14 @@ namespace BoardingAppAPI.Controllers
 
             foreach (var task in user.Tasks)
             {
-                var levelsList;
+                var levelsList = new List<DBTask>(); ;
 
                 if (levels.ContainsKey(task.Level))
                 {
-                    levelsList = levels.Get(task.Level);
+                    levelsList = levels[task.Level];
 
-                } else
-                {
-                    levelsList = new List<DBTask>();
                 }
+
                 levelsList.Add(task);
                 levels[task.Level] = levelsList;
             }
