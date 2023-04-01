@@ -5,10 +5,6 @@ namespace BoardingAppAPI.Models.Database
 {
     public class DBUser
     {
-        public DBUser()
-        {
-        }
-
         [Key]
         [JsonIgnore]
         public long Id { get; set; }

@@ -20,7 +20,7 @@ namespace BoardingAppAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetLevelsAsync(string userName, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync(string userName, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .Include(u => u.Tasks)
@@ -31,23 +31,7 @@ namespace BoardingAppAPI.Controllers
                 return NotFound();
             }
 
-            var levels = new Dictionary<int, List<DBTask>>();
-
-            foreach (var task in user.Tasks)
-            {
-                var levelsList = new List<DBTask>(); ;
-
-                if (levels.ContainsKey(task.Level))
-                {
-                    levelsList = levels[task.Level];
-
-                }
-
-                levelsList.Add(task);
-                levels[task.Level] = levelsList;
-            }
-
-            return Ok(levels);
+            return Ok();
         }
     }
 }
