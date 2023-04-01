@@ -62,28 +62,28 @@ namespace BoardingAppAPI.Controllers
                 Name = "Task1",
                 Description = "Description 1",
                 IsActive = true,
-                Level = 5
+                Level = 1
             };
             var task2 = new DBTask()
             {
                 Name = "Task2",
                 Description = "Description 2",
                 IsActive = true,
-                Level = 5
+                Level = 2
             };
             var task3 = new DBTask()
             {
                 Name = "Task3",
                 Description = "Description 3",
                 IsActive = true,
-                Level = 5
+                Level = 3
             };
             var task4 = new DBTask()
             {
                 Name = "Task4",
                 Description = "Description 4",
                 IsActive = true,
-                Level = 5
+                Level = 4
             };
             var task5 = new DBTask()
             {
