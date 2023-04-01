@@ -23,7 +23,8 @@ namespace BoardingAppAPI.Controllers
         public async Task<IActionResult> GetLevelsAsync(string userName, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(user => user.UserName == userName, cancellationToken);
+                .Include(u => u.Tasks)
+                .FirstOrDefaultAsync(u => u.UserName == userName, cancellationToken);
 
             if (user is null)
             {
