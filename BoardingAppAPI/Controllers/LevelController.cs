@@ -1,4 +1,5 @@
-﻿using BoardingAppAPI.Models.ActionResult;
+﻿using BoardingAppAPI.Models;
+using BoardingAppAPI.Models.ActionResult;
 using BoardingAppAPI.Models.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,20 @@ namespace BoardingAppAPI.Controllers
             };
 
             return Ok(levelResult);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddLevelAsync([FromBody] LevelModel model)
+        {
+            var level = new DBLevel()
+            {
+                Name = model.Name
+            };
+
+            _context.Levels.Add(level);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
